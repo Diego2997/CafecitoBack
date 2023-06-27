@@ -1,8 +1,9 @@
 import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
-import dotenv from 'dotenv'
 import path from 'path'
+import 'dotenv/config'
+import './src/database/dbConnection'
 
 //Tomar un puerto
 //crear una instancia de express
