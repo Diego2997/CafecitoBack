@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
+import path from 'path'
 
 //Tomar un puerto
 //crear una instancia de express
@@ -15,4 +16,7 @@ app.listen(app.get("port"),()=>{
 app.use(cors())//permite conexiones remotas
 app.use(express.json())//tomar del objeto request datos en formato json
 app.use(morgan("dev"))
+
+console.log(path.join(__dirname))
+app.use(express.static(path.join(__dirname,"/public")))
 //rutas
