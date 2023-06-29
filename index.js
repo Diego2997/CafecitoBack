@@ -4,6 +4,7 @@ import morgan from 'morgan'
 import path from 'path'
 import 'dotenv/config'
 import './src/database/dbConnection'
+import productosRouter from './src/routes/productos.routes'
 
 //Tomar un puerto
 //crear una instancia de express
@@ -21,3 +22,7 @@ app.use(morgan("dev"))
 console.log(path.join(__dirname))
 app.use(express.static(path.join(__dirname,"/public")))
 //rutas
+app.use('/api',productosRouter)
+// app.get('/productos',(req,res)=>{
+//     res.send('Esto fue una peticion get')
+// })
