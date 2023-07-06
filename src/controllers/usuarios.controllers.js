@@ -26,3 +26,29 @@ export const crearUsuario = async(req,res) =>{
         res.status(400).json(error.message)
     }
 }
+
+export const login = async(req,res)=>{
+    try {
+        const {email,contrasenia} = req.body
+        let usuario = await Usuario.findOne({email})
+        if(!usuario){
+            return res.status(404).json({
+            mensaje:"Correo o password invalido"
+            })
+        }
+        if(usuario.password !== contrasenia){
+            return res.status(400).json({
+            mensaje:"Correo o password invalido"
+                })
+        }
+
+        res.status(200).json({
+            mensaje:"El usuario existe",
+            nombreUsuario: usuario.nombreUsuario,
+            uid:usuario._id
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(404).json("Error al loguear un usuario")
+    }
+}
