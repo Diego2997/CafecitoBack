@@ -1,4 +1,5 @@
 import Usuario from "../models/usuario";
+import bcrypt from 'bcrypt'
 
 export const obtenerUsuarios = async(req,res) =>{
     try {
@@ -19,10 +20,17 @@ export const obtenerUnUsuario = async(req,res) =>{
 }
 export const crearUsuario = async(req,res) =>{
     try {
+        let consultaUsuario = await Usuario.findOne({email:req.body.email})
+        if(consultaUsuario){
+            return res.status(400).json({mensaje:"Ya existe un usuario con el correo enviado"})
+        }
        const nuevoUsuario = new Usuario(req.body)
+        const salt = bcrypt.genSaltSync(10)
+        nuevoUsuario.contrasenia = bcrypt.hashSync(nuevoUsuario.contrasenia,salt)
        await nuevoUsuario.save()
        res.status(201).json({mensaje:"Se creo un nuevo usuario"})
     } catch (error) {
+        console.log(error)
         res.status(400).json(error.message)
     }
 }
@@ -36,7 +44,7 @@ export const login = async(req,res)=>{
             mensaje:"Correo o password invalido"
             })
         }
-        if(usuario.password !== contrasenia){
+        if(usuario.contrasenia !== contrasenia){
             return res.status(400).json({
             mensaje:"Correo o password invalido"
                 })
@@ -45,7 +53,7 @@ export const login = async(req,res)=>{
         res.status(200).json({
             mensaje:"El usuario existe",
             nombreUsuario: usuario.nombreUsuario,
-            uid:usuario._id
+            uid:usuario._id //uid= userId
         })
     } catch (error) {
         console.log(error)
