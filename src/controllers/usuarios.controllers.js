@@ -44,7 +44,8 @@ export const login = async(req,res)=>{
             mensaje:"Correo o password invalido"
             })
         }
-        if(usuario.contrasenia !== contrasenia){
+        const passwordValido = bcrypt.compareSync(contrasenia,usuario.contrasenia)
+        if(!passwordValido){
             return res.status(400).json({
             mensaje:"Correo o password invalido"
                 })
